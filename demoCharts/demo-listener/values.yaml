@@ -1,0 +1,33 @@
+# Copyright 2019 IBM Corporation All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+appName: demo-listener
+serviceType: LoadBalancer
+appPort: 8080
+appReplicaCount: 1
+maxSurge: 0
+maxUnavailable: 1
+
+DOCKER_REGISTRY_SECRET: regcred
+REDIS_HOST: <UUID>.<ID>.databases.appdomain.cloud
+REDIS_PORT: 32305
+REDIS_DB: 0
+REDIS_SSL: True
+LISTENER_TYPE: demo
+
+
+PSQL_HOST: <UUID>.<ID>..databases.appdomain.cloud
+PSQL_PORT: 31414
+PSQL_DB: ibmclouddb
+PSQL_USER: ibm_cloud_<ID>
+
+
+image: de.icr.io/fd4b-demo/demo-listener
+#image: demo-flask
+
+tag: 0.0.2
+
+limits:
+  memory: 1Gi
+requests:
+  memory: 1Gi

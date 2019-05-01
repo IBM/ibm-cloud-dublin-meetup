@@ -1,0 +1,30 @@
+# Copyright 2019 IBM Corporation All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+appName: demo-flask
+serviceType: LoadBalancer
+appPort: 5000
+appReplicaCount: 1
+maxSurge: 0
+maxUnavailable: 1
+
+DOCKER_REGISTRY_SECRET: regcred
+
+
+WAIT_QUEUE: demo_wait_q_0
+REDIS_HOST: <UUID>.<ID>..databases.appdomain.cloud
+REDIS_PORT: 32305
+REDIS_DB: 0
+REDIS_SSL: True
+FLASK_APP: /opt/flaskform/__main__.py
+
+image: de.icr.io/fd4b-demo/demo-flask
+#image: demo-flask
+
+tag: 0.1.18
+
+limits:
+  memory: 1Gi
+requests:
+  memory: 1Gi
+

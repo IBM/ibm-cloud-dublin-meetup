@@ -1,0 +1,42 @@
+# Copyright 2019 IBM Corporation All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+---
+apiVersion: flux.weave.works/v1beta1
+kind: HelmRelease
+metadata:
+  name: demo-listener
+  namespace: demo
+  annotations:
+    flux.weave.works/automated: 'true'
+# This should only pick up images with X.Y.Z release tag and sort them properly as per version increases
+    flux.weave.works/tag.chart-image: 'semver:*'
+spec:
+  releaseName: demo-listener
+  chart: 
+    git: git@github.com:marchmallow/ibm-cloud-dublin-meetup.git
+    ref: master
+    path: demoCharts/demo-listener
+  values:
+    appReplicaCount: 1
+    DOCKER_REGISTRY_SECRET: regcred
+    #redis
+    REDIS_HOST: <UUID>.<ID>.databases.appdomain.cloud
+    REDIS_PORT: <PORT>
+    REDIS_DB: 0
+    REDIS_SSL: true
+    LISTENER_TYPE: demo
+    #psql
+    PSQL_HOST: <UUID>.<ID>.databases.appdomain.cloud
+    PSQL_PORT: <PORT>
+    PSQL_DB: ibmclouddb
+    PSQL_USER: ibm_cloud_<ID>
+
+    #image
+    image: de.icr.io/fd4b-demo/demo-listener
+    tag: 0.0.3
+    #Resource
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 1Gi
