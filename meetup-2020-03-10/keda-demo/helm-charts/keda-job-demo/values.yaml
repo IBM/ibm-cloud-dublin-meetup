@@ -1,0 +1,41 @@
+appName: job-demo
+appPort: 8080
+
+DOCKER_REGISTRY_SECRET: default-de-icr-io
+REDIS_HOST: 55dde217-943c-4943-b2a9-efca9c62018c.bmo1leol0d54tib7un7g.databases.appdomain.cloud:31268
+REDIS_DB: 0
+REDIS_SSL: True
+BROKER_TYPE: demo2
+BROKER_MODE: job
+
+
+image: de.icr.io/fd4b-demo/broker-demo
+
+tag: 0.0.8
+
+BACK_OFF_LIMIT: 2
+
+
+limits:
+  memory: 1Gi
+requests:
+  memory: 1Gi
+
+
+keda:
+  name: redis-jobscaler
+  scaleType: job
+  parallelism: 1 # for the same job
+  completions: 2 # for the same job 0/2
+  activeDeadlineSeconds: 600
+  backoffLimit: 2
+  pollingInterval: 30  # Optional. Default: 30 seconds
+  cooldownPeriod:  300 # Optional. Default: 300 seconds
+  minReplicaCount: 0   # Optional. Default: 0
+  maxReplicaCount: 1 # Optional. Default: 100
+  address: REDIS_HOST # Required host:port format
+  password: REDIS_PASSWORD
+  listName: demo2_wait_q_0 # Required
+  listLength: "5" # Required
+  enableTLS: "true" # optional
+  databaseIndex: "0" # optional

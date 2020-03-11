@@ -1,0 +1,22 @@
+apiVersion: keda.k8s.io/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    deploymentName: {{ .Values.deploymentName }}
+spec:
+  scaleTargetRef:
+    deploymentName: {{ .Values.deploymentName }}
+  pollingInterval: {{ .Values.pollingInterval }}  # Optional. Default: 30 seconds
+  cooldownPeriod:  {{ .Values.cooldownPeriod }} # Optional. Default: 300 seconds
+  minReplicaCount: {{ .Values.minReplicaCount }}   # Optional. Default: 0
+  maxReplicaCount: {{ .Values.maxReplicaCount }} # Optional. Default: 100
+  triggers:
+  - type: redis
+    metadata:
+      address: {{ .Values.address }} # Required host:port format
+      password: {{ .Values.password }}
+      listName: {{ .Values.listName }} # Required
+      listLength: {{ .Values.listLength | quote }} # Required
+      enableTLS: {{ .Values.enableTLS | quote }} # optional
+      databaseIndex: {{ .Values.databaseIndex | quote }} # optional

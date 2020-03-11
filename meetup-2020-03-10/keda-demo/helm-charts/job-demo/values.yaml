@@ -1,0 +1,23 @@
+appName: job-demo
+appPort: 8080
+
+DOCKER_REGISTRY_SECRET: default-de-icr-io
+REDIS_HOST: 55dde217-943c-4943-b2a9-efca9c62018c.bmo1leol0d54tib7un7g.databases.appdomain.cloud:31268
+REDIS_DB: 0
+REDIS_SSL: True
+REDIS_PASSWORD: 0bcc643604ef248c887a0fde9e59acbedb2b85882533856f0ab81558d55fdf4c
+BROKER_TYPE: demo2
+BROKER_MODE: job
+
+
+image: de.icr.io/fd4b-demo/broker-demo
+
+tag: 0.0.8
+
+BACK_OFF_LIMIT: 2
+
+
+limits:
+  memory: 1Gi
+requests:
+  memory: 1Gi

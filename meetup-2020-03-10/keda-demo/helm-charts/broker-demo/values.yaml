@@ -1,0 +1,21 @@
+appName: broker-demo
+appPort: 8080
+appReplicaCount: 1
+maxSurge: 0
+maxUnavailable: 1
+
+DOCKER_REGISTRY_SECRET: default-de-icr-io
+REDIS_HOST: 55dde217-943c-4943-b2a9-efca9c62018c.bmo1leol0d54tib7un7g.databases.appdomain.cloud:31268
+REDIS_DB: 0
+REDIS_SSL: True
+BROKER_TYPE: demo
+
+
+image: de.icr.io/fd4b-demo/broker-demo
+
+tag: 0.0.8
+
+limits:
+  memory: 1Gi
+requests:
+  memory: 1Gi
