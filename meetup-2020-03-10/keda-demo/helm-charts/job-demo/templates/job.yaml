@@ -1,0 +1,50 @@
+# Copyright 2019 IBM Corporation All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "job-demo.fullname" . }}
+  labels:
+    app: {{ .Values.appName }}
+    chart: {{ template "job-demo.fullname" . }}
+spec:
+  backoffLimit: {{ .Values.BACK_OFF_LIMIT }}
+  template:
+    metadata:
+      name: {{ template "job-demo.fullname" . }}
+      labels:
+        app: {{ .Values.appName }}
+        chart: {{ template "job-demo.fullname" . }}
+    spec:
+      restartPolicy: Never
+      imagePullSecrets:
+        - name: {{ .Values.DOCKER_REGISTRY_SECRET }}
+      containers:
+      - name: job-demo
+        imagePullPolicy: IfNotPresent
+        image: "{{ .Values.image }}:{{ .Values.tag }}"
+        resources:
+          limits:
+            memory: "{{ .Values.limits.memory }}"
+          requests:
+            memory: "{{ .Values.requests.memory }}"
+        env:
+        - name: BROKER_TYPE
+          value: {{ .Values.BROKER_TYPE }}
+        - name: BROKER_MODE
+          value: {{ .Values.BROKER_MODE }}
+        - name: REDIS_HOST
+          value: {{ .Values.REDIS_HOST }}
+        # - name: REDIS_PORT
+        #   value: {{ .Values.REDIS_PORT | quote }}
+        - name: REDIS_DB
+          value: {{ .Values.REDIS_DB | quote }}
+        - name: REDIS_SSL
+          value: {{ .Values.REDIS_SSL | quote }}
+        - name: REDIS_PASSWORD
+          # value: {{ .Values.REDIS_PASSWORD }}
+          valueFrom:
+            secretKeyRef:
+              name: redis-password
+              key: REDIS_PASSWORD

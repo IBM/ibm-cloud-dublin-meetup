@@ -1,0 +1,66 @@
+# Copyright 2019 IBM Corporation All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+apiVersion: keda.k8s.io/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.keda.name }}
+spec:
+  scaleType: {{ .Values.keda.scaleType }}
+  jobTargetRef:
+    parallelism: {{ .Values.keda.parallelism }} # [max number of desired pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
+    completions: {{ .Values.keda.completions }} # [desired number of successfully finished pods](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#controlling-parallelism)
+    activeDeadlineSeconds: {{ .Values.keda.activeDeadlineSeconds }} # Specifies the duration in seconds relative to the startTime that the job may be active before the system tries to terminate it; value must be positive integer
+    backoffLimit: {{ .Values.keda.backoffLimit }} # Specifies the number of retries before marking this job failed. Defaults to 6
+    template:
+      # describes the [job template](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)
+      metadata:
+        name: {{ template "keda-job-demo.fullname" . }}
+        labels:
+          app: {{ .Values.appName }}
+          chart: {{ template "keda-job-demo.fullname" . }}
+      spec:
+        restartPolicy: Never
+        imagePullSecrets:
+          - name: {{ .Values.DOCKER_REGISTRY_SECRET }}
+        containers:
+        - name: keda-job-demo
+          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.image }}:{{ .Values.tag }}"
+          resources:
+            limits:
+              memory: "{{ .Values.limits.memory }}"
+            requests:
+              memory: "{{ .Values.requests.memory }}"
+          env:
+          - name: BROKER_TYPE
+            value: {{ .Values.BROKER_TYPE }}
+          - name: BROKER_MODE
+            value: {{ .Values.BROKER_MODE }}
+          - name: REDIS_HOST
+            value: {{ .Values.REDIS_HOST }}
+          # - name: REDIS_PORT
+          #   value: {{ .Values.REDIS_PORT | quote }}
+          - name: REDIS_DB
+            value: {{ .Values.REDIS_DB | quote }}
+          - name: REDIS_SSL
+            value: {{ .Values.REDIS_SSL | quote }}
+          - name: REDIS_PASSWORD
+            # value: {{ .Values.REDIS_PASSWORD }}
+            valueFrom:
+              secretKeyRef:
+                name: redis-password
+                key: REDIS_PASSWORD
+  pollingInterval: {{ .Values.keda.pollingInterval }}  # Optional. Default: 30 seconds
+  cooldownPeriod:  {{ .Values.keda.cooldownPeriod }} # Optional. Default: 300 seconds
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}   # Optional. Default: 0
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }} # Optional. Default: 100
+  triggers:
+  - type: redis
+    metadata:
+      address: {{ .Values.keda.address }} # Required host:port format
+      password: {{ .Values.keda.password }}
+      listName: {{ .Values.keda.listName }} # Required
+      listLength: {{ .Values.keda.listLength | quote }} # Required
+      enableTLS: {{ .Values.keda.enableTLS | quote }} # optional
+      databaseIndex: {{ .Values.keda.databaseIndex | quote }} # optional
