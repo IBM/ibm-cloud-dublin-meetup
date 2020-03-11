@@ -94,11 +94,6 @@ release:
 	@echo "Release $(NEW_VERSION)"
 	@git tag -a $(NEW_VERSION) -m "Release $(NEW_VERSION)"
 
-
-release-if-not-auto-push: ##Checks if the commit was done automatically or not. Does a release if it was not automatically pushed.
-release-if-not-auto-push:
-	@./etc/scripts/deployment/releaseIfNotAutoPush.sh
-
 release-push: ###Pushes committed changes and tags to github
 release-push: BRANCH=master
 release-push:

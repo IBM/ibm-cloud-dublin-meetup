@@ -1,5 +1,31 @@
 # KEDA Demo
 
+## Helm 3 install steps
+
+Install helm: <https://helm.sh/docs/intro/install/>
+
+```bash
+# Create namespace
+oc create namespace demo
+# Build image for broker-demo
+cd broker-demo
+make build
+make release
+make push
+# Add Helm repo
+helm repo add kedacore https://kedacore.github.io/charts
+# Update Helm repo
+helm repo update
+# Install keda Helm chart
+helm install keda kedacore/keda --namespace demo
+# Install broker demo
+helm install broker-demo broker-demo -n demo
+#keda broker
+helm install keda-broker-demo keda-broker-demo -n demo
+#keda jobs
+helm install keda-job-demo keda-job-demo -n demo
+```
+
 ## Additional Info
 
 ### KEDA
