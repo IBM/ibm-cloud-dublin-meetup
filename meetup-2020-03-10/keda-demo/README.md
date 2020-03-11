@@ -11,6 +11,7 @@ oc create namespace demo
 cd broker-demo
 make build
 make release
+make docker-auth
 make push
 # Add Helm repo
 helm repo add kedacore https://kedacore.github.io/charts
