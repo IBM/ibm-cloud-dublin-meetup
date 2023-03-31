@@ -29,7 +29,7 @@ setup(
     install_requires=[
         'Flask==1.0.2',
         'WTForms==2.2.1',
-        'redis==2.10.6'
+        'redis==4.4.4'
     ],
     package_data={},
     data_files=[],
