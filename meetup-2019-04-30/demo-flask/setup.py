@@ -27,7 +27,7 @@ setup(
     keywords='',
     packages=find_packages(exclude=['contrib', 'docs', 'test*']),
     install_requires=[
-        'Flask==1.0.2',
+        'Flask==2.3.2',
         'WTForms==2.2.1',
         'redis==2.10.6'
     ],
